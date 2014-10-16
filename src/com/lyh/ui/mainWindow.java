@@ -1,39 +1,36 @@
 package com.lyh.ui;
 
+import java.awt.CardLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
 
+import javax.swing.AbstractListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JRadioButton;
-import javax.swing.JTextArea;
-import java.awt.CardLayout;
-import javax.swing.JList;
-import javax.swing.JSpinner;
-import javax.swing.JEditorPane;
-import javax.swing.JSeparator;
-import javax.swing.AbstractListModel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import java.awt.Font;
-import java.awt.Color;
+
+import com.lyh.bean.PubParamBean;
+import com.lyh.listener.SelectDirLisenter;
+import com.lyh.listener.StartSearchListener;
 
 public class mainWindow {
 
 	private JFrame frame;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField dirField;
+	private JTextField keywordsField;
+	private PubParamBean pubParamBean;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -47,16 +44,13 @@ public class mainWindow {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
+	//构造函数
 	public mainWindow() {
+		pubParamBean = new PubParamBean();
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+	//初始化界面
 	private void initialize() {
 		frame = new JFrame();
 		frame.setResizable(false);
@@ -66,55 +60,55 @@ public class mainWindow {
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		
-		JMenu menu = new JMenu("\u6587\u4EF6");
+		JMenu menu = new JMenu("文件");
 		menu.setFont(new Font("宋体", Font.PLAIN, 12));
 		menuBar.add(menu);
 		
-		JMenuItem menuItem = new JMenuItem("\u9009\u62E9\u76EE\u5F55");
-		menuItem.setFont(new Font("宋体", Font.PLAIN, 12));
-		menu.add(menuItem);
+		JMenuItem chooseDirMenu = new JMenuItem("选择目录");
+		chooseDirMenu.setFont(new Font("宋体", Font.PLAIN, 12));
+		menu.add(chooseDirMenu);
 		
-		JMenuItem menuItem_1 = new JMenuItem("\u9000\u51FA");
-		menuItem_1.setFont(new Font("宋体", Font.PLAIN, 12));
-		menu.add(menuItem_1);
+		JMenuItem exitMenu = new JMenuItem("退出");
+		exitMenu.setFont(new Font("宋体", Font.PLAIN, 12));
+		menu.add(exitMenu);
 		
-		JMenu menu_2 = new JMenu("\u67E5\u627E\u65B9\u5F0F");
-		menu_2.setFont(new Font("宋体", Font.PLAIN, 12));
-		menuBar.add(menu_2);
+		JMenu recousiveWayMenu = new JMenu("查找方式");
+		recousiveWayMenu.setFont(new Font("宋体", Font.PLAIN, 12));
+		menuBar.add(recousiveWayMenu);
 		
-		JRadioButton radioButton = new JRadioButton("\u9012\u5F52\u67E5\u627E");
+		JRadioButton radioButton = new JRadioButton("递归查找");
 		radioButton.setFont(new Font("宋体", Font.PLAIN, 12));
 		radioButton.setSelected(true);
-		menu_2.add(radioButton);
+		recousiveWayMenu.add(radioButton);
 		
-		JRadioButton radioButton_1 = new JRadioButton("\u975E\u9012\u5F52\u67E5\u627E");
-		radioButton_1.setFont(new Font("宋体", Font.PLAIN, 12));
-		menu_2.add(radioButton_1);
+		JRadioButton nonRecousiveWay = new JRadioButton("非递归查找");
+		nonRecousiveWay.setFont(new Font("宋体", Font.PLAIN, 12));
+		recousiveWayMenu.add(nonRecousiveWay);
 		
-		JMenu menu_3 = new JMenu("\u8FC7\u6EE4\u5668");
+		JMenu menu_3 = new JMenu("过滤器");
 		menu_3.setFont(new Font("宋体", Font.PLAIN, 12));
 		menuBar.add(menu_3);
 		
-		JRadioButton radioButton_2 = new JRadioButton("\u6240\u6709\u683C\u5F0F");
-		radioButton_2.setFont(new Font("宋体", Font.PLAIN, 12));
-		radioButton_2.setSelected(true);
-		menu_3.add(radioButton_2);
+		JRadioButton allFormatMenu = new JRadioButton("所有格式");
+		allFormatMenu.setFont(new Font("宋体", Font.PLAIN, 12));
+		allFormatMenu.setSelected(true);
+		menu_3.add(allFormatMenu);
 		
-		JRadioButton radioButton_3 = new JRadioButton("\u6307\u5B9A\u683C\u5F0F");
-		radioButton_3.setFont(new Font("宋体", Font.PLAIN, 12));
-		menu_3.add(radioButton_3);
+		JRadioButton assignFormatMenu = new JRadioButton("指定格式");
+		assignFormatMenu.setFont(new Font("宋体", Font.PLAIN, 12));
+		menu_3.add(assignFormatMenu);
 		
-		JRadioButton radioButton_4 = new JRadioButton("\u81EA\u5B9A\u4E49\u683C\u5F0F");
-		radioButton_4.setFont(new Font("宋体", Font.PLAIN, 12));
-		menu_3.add(radioButton_4);
+		JRadioButton ManuFormatMenu = new JRadioButton("自定义格式");
+		ManuFormatMenu.setFont(new Font("宋体", Font.PLAIN, 12));
+		menu_3.add(ManuFormatMenu);
 		
-		JMenu menu_1 = new JMenu("\u8BF4\u660E");
+		JMenu menu_1 = new JMenu("说明");
 		menu_1.setFont(new Font("宋体", Font.PLAIN, 12));
 		menuBar.add(menu_1);
 		
-		JMenuItem menuItem_2 = new JMenuItem("\u8BF4\u660E");
-		menuItem_2.setFont(new Font("宋体", Font.PLAIN, 12));
-		menu_1.add(menuItem_2);
+		JMenuItem detailsMenu = new JMenuItem("说明");
+		detailsMenu.setFont(new Font("宋体", Font.PLAIN, 12));
+		menu_1.add(detailsMenu);
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
@@ -126,11 +120,11 @@ public class mainWindow {
 		JScrollPane scrollPane_4 = new JScrollPane();
 		panel.add(scrollPane_4, "name_4355653145808");
 		
-		JTextArea txtrtxtxmlhtml = new JTextArea();
-		txtrtxtxmlhtml.setText(".txt   .xml   .html  .java  .cpp  .c   .cmd   .bat    .js   .dtd    .py    .pyw      .property ");
-		txtrtxtxmlhtml.setLineWrap(true);
-		txtrtxtxmlhtml.setFont(new Font("宋体", Font.PLAIN, 13));
-		scrollPane_4.setViewportView(txtrtxtxmlhtml);
+		JTextArea manuDefineArea = new JTextArea();
+		manuDefineArea.setText(".txt   .xml   .html  .java  .cpp  .c   .cmd   .bat    .js   .dtd    .py    .pyw      .property ");
+		manuDefineArea.setLineWrap(true);
+		manuDefineArea.setFont(new Font("宋体", Font.PLAIN, 13));
+		scrollPane_4.setViewportView(manuDefineArea);
 		
 		JPanel panel_3 = new JPanel();
 		panel.add(panel_3, "name_3281517048565");
@@ -143,10 +137,10 @@ public class mainWindow {
 		scrollPane.setBounds(0, 0, 186, 108);
 		panel_1.add(scrollPane);
 		
-		JList list = new JList();
-		list.setFont(new Font("宋体", Font.PLAIN, 12));
-		scrollPane.setViewportView(list);
-		list.setModel(new AbstractListModel() {
+		JList formatList = new JList();
+		formatList.setFont(new Font("宋体", Font.PLAIN, 12));
+		scrollPane.setViewportView(formatList);
+		formatList.setModel(new AbstractListModel() {
 			String[] values = new String[] {".txt", ".c", ".java", ".php", ".js", ".cmd", ".bat", ".cpp", ".py", ".pyw", ".sh", ".html", ".xml", ".dtd"};
 			public int getSize() {
 				return values.length;
@@ -160,66 +154,72 @@ public class mainWindow {
 		scrollPane_1.setBounds(342, 0, 186, 108);
 		panel_1.add(scrollPane_1);
 		
-		JList list_1 = new JList();
-		list_1.setFont(new Font("宋体", Font.PLAIN, 12));
-		scrollPane_1.setViewportView(list_1);
+		JList selectFormatList = new JList();
+		selectFormatList.setFont(new Font("宋体", Font.PLAIN, 12));
+		scrollPane_1.setViewportView(selectFormatList);
 		
-		JLabel label = new JLabel("\u67E5\u627E\u76EE\u5F55\uFF1A");
+		JLabel label = new JLabel("查找目录：");
 		label.setFont(new Font("宋体", Font.PLAIN, 12));
 		label.setBounds(10, 10, 70, 15);
 		frame.getContentPane().add(label);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("宋体", Font.PLAIN, 12));
-		textField.setBounds(77, 7, 356, 21);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		dirField = new JTextField();
+		dirField.setFont(new Font("宋体", Font.PLAIN, 12));
+		dirField.setBounds(77, 7, 356, 21);
+		frame.getContentPane().add(dirField);
+		dirField.setColumns(10);
 		
-		JButton button = new JButton("\u67E5\u627E");
-		button.setFont(new Font("宋体", Font.PLAIN, 12));
-		button.setBounds(457, 35, 83, 23);
-		frame.getContentPane().add(button);
+		JButton findButton = new JButton("查找");
+		findButton.setFont(new Font("宋体", Font.PLAIN, 12));
+		findButton.setBounds(457, 35, 83, 23);
+		frame.getContentPane().add(findButton);
 		
-		JButton button_1 = new JButton("\u9009\u62E9\u76EE\u5F55");
-		button_1.setFont(new Font("宋体", Font.PLAIN, 12));
-		button_1.setBounds(457, 6, 83, 23);
-		frame.getContentPane().add(button_1);
+		JButton selectDirButton = new JButton("选择目录");
+		selectDirButton.setFont(new Font("宋体", Font.PLAIN, 12));
+		selectDirButton.setBounds(457, 6, 83, 23);
+		frame.getContentPane().add(selectDirButton);
 		
-		JLabel label_1 = new JLabel("\u6267\u884C\u72B6\u6001\uFF1A");
+		JLabel label_1 = new JLabel("执行状态：");
 		label_1.setFont(new Font("宋体", Font.PLAIN, 12));
 		label_1.setBounds(10, 197, 70, 15);
 		frame.getContentPane().add(label_1);
 		
-		JLabel label_2 = new JLabel("\u67E5\u8BE2\u7ED3\u679C\uFF1A");
+		JLabel label_2 = new JLabel("查询结果：");
 		label_2.setFont(new Font("宋体", Font.PLAIN, 12));
 		label_2.setBounds(10, 439, 70, 15);
 		frame.getContentPane().add(label_2);
 		
-		JLabel label_3 = new JLabel("\u67E5\u627E\u5B57\u7B26\uFF1A");
+		JLabel label_3 = new JLabel("查找字符：");
 		label_3.setFont(new Font("宋体", Font.PLAIN, 12));
 		label_3.setBounds(10, 35, 70, 15);
 		frame.getContentPane().add(label_3);
 		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("宋体", Font.PLAIN, 12));
-		textField_1.setColumns(10);
-		textField_1.setBounds(77, 35, 356, 21);
-		frame.getContentPane().add(textField_1);
+		keywordsField = new JTextField();
+		keywordsField.setFont(new Font("宋体", Font.PLAIN, 12));
+		keywordsField.setColumns(10);
+		keywordsField.setBounds(77, 35, 356, 21);
+		frame.getContentPane().add(keywordsField);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBounds(10, 222, 530, 210);
 		frame.getContentPane().add(scrollPane_2);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setFont(new Font("宋体", Font.PLAIN, 13));
-		scrollPane_2.setViewportView(textArea);
+		JTextArea runStatusArea = new JTextArea();
+		runStatusArea.setLineWrap(true);
+		runStatusArea.setFont(new Font("宋体", Font.PLAIN, 13));
+		scrollPane_2.setViewportView(runStatusArea);
 		
 		JScrollPane scrollPane_3 = new JScrollPane();
 		scrollPane_3.setBounds(10, 464, 530, 131);
 		frame.getContentPane().add(scrollPane_3);
 		
-		JTextArea textArea_1 = new JTextArea();
-		textArea_1.setFont(new Font("宋体", Font.PLAIN, 13));
-		scrollPane_3.setViewportView(textArea_1);
+		JTextArea resultArea = new JTextArea();
+		resultArea.setFont(new Font("宋体", Font.PLAIN, 13));
+		scrollPane_3.setViewportView(resultArea);
+		
+		
+		//添加监听程序
+		selectDirButton.addMouseListener(new SelectDirLisenter(frame, dirField,pubParamBean));
+		findButton.addMouseListener(new StartSearchListener(frame, dirField, keywordsField, pubParamBean, manuDefineArea, selectFormatList, runStatusArea, resultArea));
 	}
 }
