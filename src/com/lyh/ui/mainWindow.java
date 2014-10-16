@@ -181,12 +181,12 @@ public class mainWindow {
 		
 		JLabel label_1 = new JLabel("执行状态：");
 		label_1.setFont(new Font("宋体", Font.PLAIN, 12));
-		label_1.setBounds(10, 197, 70, 15);
+		label_1.setBounds(10, 358, 70, 15);
 		frame.getContentPane().add(label_1);
 		
 		JLabel label_2 = new JLabel("查询结果：");
 		label_2.setFont(new Font("宋体", Font.PLAIN, 12));
-		label_2.setBounds(10, 439, 70, 15);
+		label_2.setBounds(10, 197, 70, 15);
 		frame.getContentPane().add(label_2);
 		
 		JLabel label_3 = new JLabel("查找字符：");
@@ -201,25 +201,24 @@ public class mainWindow {
 		frame.getContentPane().add(keywordsField);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(10, 222, 530, 210);
+		scrollPane_2.setBounds(10, 383, 530, 210);
 		frame.getContentPane().add(scrollPane_2);
 		
 		JTextArea runStatusArea = new JTextArea();
-		runStatusArea.setLineWrap(true);
-		runStatusArea.setFont(new Font("宋体", Font.PLAIN, 13));
 		scrollPane_2.setViewportView(runStatusArea);
+		runStatusArea.setFont(new Font("宋体", Font.PLAIN, 13));
 		
 		JScrollPane scrollPane_3 = new JScrollPane();
-		scrollPane_3.setBounds(10, 464, 530, 131);
+		scrollPane_3.setBounds(10, 217, 530, 131);
 		frame.getContentPane().add(scrollPane_3);
 		
 		JTextArea resultArea = new JTextArea();
-		resultArea.setFont(new Font("宋体", Font.PLAIN, 13));
 		scrollPane_3.setViewportView(resultArea);
+		resultArea.setFont(new Font("宋体", Font.PLAIN, 13));
 		
 		
 		//添加监听程序
-		selectDirButton.addMouseListener(new SelectDirLisenter(frame, dirField,pubParamBean));
 		findButton.addMouseListener(new StartSearchListener(frame, dirField, keywordsField, pubParamBean, manuDefineArea, selectFormatList, runStatusArea, resultArea));
+		selectDirButton.addMouseListener(new SelectDirLisenter(frame, dirField,pubParamBean));
 	}
 }

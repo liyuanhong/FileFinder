@@ -34,34 +34,44 @@ public class StartSearchListener extends MouseAdapter{
 		this.pubParamBean = pubParamBean;
 		this.manuDefineArea = manuDefineArea;
 		this.selectFormatList = this.selectFormatList;
-		this.runStatusArea = this.runStatusArea;
+		this.runStatusArea = runStatusArea;
 		this.resultArea = resultArea;
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
+		resultArea.setText("");
+		runStatusArea.setText("");
 		keyword = keywordsField.getText();
 		pubParamBean.setKeywordsField(keyword);
 		searchRootDir = pubParamBean.getSearchRootDir();
-		File file = new File(searchRootDir);
-		File[] filelist = file.listFiles();
-		startSearch(filelist);
+		try{
+			File file = new File(searchRootDir);
+			File[] filelist = file.listFiles();
+			if(filelist != null){
+				startSearch(filelist);
+			}			
+		}catch(Exception ex){
+			System.out.println("no such path");
+		}
+		
 	}
 	
 	private void startSearch(File[] filelist){
-		for(int i = 0;i < filelist.length;i++){
-			if(filelist[i].isDirectory()){
-				String _filepath = filelist[i].getAbsolutePath();
-				File _file = new File(_filepath);
-				File[] _filelist = _file.listFiles();
-				for(int j = 0;j < _filelist.length;j++){
+		if(filelist != null){
+			for(int i = 0;i < filelist.length;i++){
+				runStatusArea.append(filelist[i].getAbsolutePath() + "\r\n");
+				if(filelist[i].isDirectory()){
+					String _filepath = filelist[i].getAbsolutePath();
+					File _file = new File(_filepath);
+					File[] _filelist = _file.listFiles();
 					startSearch(_filelist);
-				}				
-			}else{
-				searchKeywork(filelist[i].getAbsolutePath());
+				}else{
+//					searchKeywork(filelist[i].getAbsolutePath());
+				}
 			}
-		}
+		}		
 	}
 	
 	private void searchKeywork(String filePath){
@@ -71,7 +81,6 @@ public class StartSearchListener extends MouseAdapter{
 			String temp = "";
 			while((temp = bfreader.readLine()) != null){
 				if(temp.contains(keyword)){
-					System.out.println(filePath);
 					resultArea.append(filePath + "\r\n");
 					return;
 				}
