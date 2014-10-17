@@ -1,14 +1,15 @@
 package com.lyh.listener;
 
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -50,15 +51,20 @@ public class StartSearchListener extends MouseAdapter{
 			File file = new File(searchRootDir);
 			File[] filelist = file.listFiles();
 			if(filelist != null){
-				startSearch(filelist);
+				if(pubParamBean.getSearchWay() == 0){
+					startTreeSearch(filelist);
+				}else if(pubParamBean.getSearchWay() == 1){
+					startCurrentSearch(filelist);
+				}				
 			}			
 		}catch(Exception ex){
-			System.out.println("no such path");
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(frame, "目录不存在或目录格式有问题！", "信息", JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 	}
 	
-	private void startSearch(File[] filelist){
+	private void startTreeSearch(File[] filelist){
 		if(filelist != null){
 			for(int i = 0;i < filelist.length;i++){
 				runStatusArea.append(filelist[i].getAbsolutePath() + "\r\n");
@@ -66,12 +72,25 @@ public class StartSearchListener extends MouseAdapter{
 					String _filepath = filelist[i].getAbsolutePath();
 					File _file = new File(_filepath);
 					File[] _filelist = _file.listFiles();
-					startSearch(_filelist);
+					startTreeSearch(_filelist);
 				}else{
-//					searchKeywork(filelist[i].getAbsolutePath());
+					searchKeywork(filelist[i].getAbsolutePath());
 				}
 			}
 		}		
+	}
+	
+	private void startCurrentSearch(File[] filelist){
+		if(filelist != null){
+			for(int i = 0;i < filelist.length;i++){
+				runStatusArea.append(filelist[i].getAbsolutePath() + "\r\n");
+				if(filelist[i].isDirectory()){
+					
+				}else{
+					searchKeywork(filelist[i].getAbsolutePath());
+				}
+			}
+		}
 	}
 	
 	private void searchKeywork(String filePath){
@@ -90,6 +109,18 @@ public class StartSearchListener extends MouseAdapter{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void allFormatFilter(){
+		//不需要进性文件过滤
+	}
+	
+	public void aassignFormatFilter(){
+		
+	}
+
+	public void manuFormatFilter(){
+		
 	}
 }
 

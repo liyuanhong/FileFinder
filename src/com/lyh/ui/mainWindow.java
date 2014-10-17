@@ -3,8 +3,10 @@ package com.lyh.ui;
 import java.awt.CardLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.util.Vector;
 
 import javax.swing.AbstractListModel;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,10 +21,17 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
+import javax.swing.event.MenuEvent;
 
 import com.lyh.bean.PubParamBean;
+import com.lyh.listener.AllFormatListener;
+import com.lyh.listener.MenuExitListener;
+import com.lyh.listener.MenuFilterListener;
+import com.lyh.listener.MenuSearchWayListener;
 import com.lyh.listener.SelectDirLisenter;
+import com.lyh.listener.SelectFormatListListener;
 import com.lyh.listener.StartSearchListener;
+import com.lyh.listener.MenuSelectDriListener;
 
 public class mainWindow {
 
@@ -30,6 +39,7 @@ public class mainWindow {
 	private JTextField dirField;
 	private JTextField keywordsField;
 	private PubParamBean pubParamBean;
+	private Vector<String> allFormatList;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -47,6 +57,8 @@ public class mainWindow {
 	//构造函数
 	public mainWindow() {
 		pubParamBean = new PubParamBean();
+		allFormatList = new Vector<String>();
+		initFormatVector(allFormatList);
 		initialize();
 	}
 
@@ -76,10 +88,10 @@ public class mainWindow {
 		recousiveWayMenu.setFont(new Font("宋体", Font.PLAIN, 12));
 		menuBar.add(recousiveWayMenu);
 		
-		JRadioButton radioButton = new JRadioButton("递归查找");
-		radioButton.setFont(new Font("宋体", Font.PLAIN, 12));
-		radioButton.setSelected(true);
-		recousiveWayMenu.add(radioButton);
+		JRadioButton recousiveWay = new JRadioButton("递归查找");
+		recousiveWay.setFont(new Font("宋体", Font.PLAIN, 12));
+		recousiveWay.setSelected(true);
+		recousiveWayMenu.add(recousiveWay);
 		
 		JRadioButton nonRecousiveWay = new JRadioButton("非递归查找");
 		nonRecousiveWay.setFont(new Font("宋体", Font.PLAIN, 12));
@@ -98,9 +110,9 @@ public class mainWindow {
 		assignFormatMenu.setFont(new Font("宋体", Font.PLAIN, 12));
 		menu_3.add(assignFormatMenu);
 		
-		JRadioButton ManuFormatMenu = new JRadioButton("自定义格式");
-		ManuFormatMenu.setFont(new Font("宋体", Font.PLAIN, 12));
-		menu_3.add(ManuFormatMenu);
+		JRadioButton manuFormatMenu = new JRadioButton("自定义格式");
+		manuFormatMenu.setFont(new Font("宋体", Font.PLAIN, 12));
+		menu_3.add(manuFormatMenu);
 		
 		JMenu menu_1 = new JMenu("说明");
 		menu_1.setFont(new Font("宋体", Font.PLAIN, 12));
@@ -115,48 +127,42 @@ public class mainWindow {
 		panel.setBorder(new LineBorder(UIManager.getColor("Button.disabledForeground")));
 		panel.setBounds(10, 77, 530, 110);
 		frame.getContentPane().add(panel);
-		panel.setLayout(new CardLayout(0, 0));
-		
-		JScrollPane scrollPane_4 = new JScrollPane();
-		panel.add(scrollPane_4, "name_4355653145808");
-		
-		JTextArea manuDefineArea = new JTextArea();
-		manuDefineArea.setText(".txt   .xml   .html  .java  .cpp  .c   .cmd   .bat    .js   .dtd    .py    .pyw      .property ");
-		manuDefineArea.setLineWrap(true);
-		manuDefineArea.setFont(new Font("宋体", Font.PLAIN, 13));
-		scrollPane_4.setViewportView(manuDefineArea);
-		
-		JPanel panel_3 = new JPanel();
-		panel.add(panel_3, "name_3281517048565");
+		CardLayout cardlayout = new CardLayout(0, 0);
+		panel.setLayout(cardlayout);
 		
 		JPanel panel_1 = new JPanel();
-		panel.add(panel_1, "name_2395144553732");
-		panel_1.setLayout(null);
+		panel.add(panel_1, "panel_1");
+		
+		JPanel panel_2 = new JPanel();
+		panel.add(panel_2, "panel_2");
+		panel_2.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 0, 186, 108);
-		panel_1.add(scrollPane);
+		panel_2.add(scrollPane);
 		
 		JList formatList = new JList();
 		formatList.setFont(new Font("宋体", Font.PLAIN, 12));
 		scrollPane.setViewportView(formatList);
-		formatList.setModel(new AbstractListModel() {
-			String[] values = new String[] {".txt", ".c", ".java", ".php", ".js", ".cmd", ".bat", ".cpp", ".py", ".pyw", ".sh", ".html", ".xml", ".dtd"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
+		formatList.setListData(allFormatList);	
+		
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(342, 0, 186, 108);
-		panel_1.add(scrollPane_1);
+		panel_2.add(scrollPane_1);
 		
 		JList selectFormatList = new JList();
 		selectFormatList.setFont(new Font("宋体", Font.PLAIN, 12));
 		scrollPane_1.setViewportView(selectFormatList);
+		
+		JScrollPane panel_3 = new JScrollPane();
+		panel.add(panel_3, "panel_3");
+		
+		JTextArea manuDefineArea = new JTextArea();
+		manuDefineArea.setText(".txt   .xml   .html  .java  .cpp  .c  .bat   .js  .dtd  .py  .sh");
+		manuDefineArea.setLineWrap(true);
+		manuDefineArea.setFont(new Font("宋体", Font.PLAIN, 13));
+		panel_3.setViewportView(manuDefineArea);
 		
 		JLabel label = new JLabel("查找目录：");
 		label.setFont(new Font("宋体", Font.PLAIN, 12));
@@ -214,11 +220,36 @@ public class mainWindow {
 		
 		JTextArea resultArea = new JTextArea();
 		scrollPane_3.setViewportView(resultArea);
-		resultArea.setFont(new Font("宋体", Font.PLAIN, 13));
+		resultArea.setFont(new Font("宋体", Font.PLAIN, 13));	
 		
-		
+		//创建一个规则按钮的组
+		ButtonGroup rulegroup = new ButtonGroup();
+		rulegroup.add(allFormatMenu);
+		rulegroup.add(assignFormatMenu);
+		rulegroup.add(manuFormatMenu);
+		//创建一个查找方式的组
+		ButtonGroup searchWayGroup = new ButtonGroup();
+		searchWayGroup.add(recousiveWay);
+		searchWayGroup.add(nonRecousiveWay);
 		//添加监听程序
 		findButton.addMouseListener(new StartSearchListener(frame, dirField, keywordsField, pubParamBean, manuDefineArea, selectFormatList, runStatusArea, resultArea));
 		selectDirButton.addMouseListener(new SelectDirLisenter(frame, dirField,pubParamBean));
+		chooseDirMenu.addActionListener(new MenuSelectDriListener(frame, dirField, pubParamBean));
+		exitMenu.addActionListener(new MenuExitListener());
+		allFormatMenu.addMouseListener(new MenuFilterListener(cardlayout, panel_1, panel_2, panel_3, allFormatMenu, assignFormatMenu, manuFormatMenu, panel,pubParamBean));
+		assignFormatMenu.addMouseListener(new MenuFilterListener(cardlayout, panel_1, panel_2, panel_3, allFormatMenu, assignFormatMenu, manuFormatMenu, panel,pubParamBean));
+		manuFormatMenu.addMouseListener(new MenuFilterListener(cardlayout, panel_1, panel_2, panel_3, allFormatMenu, assignFormatMenu, manuFormatMenu, panel,pubParamBean));
+		recousiveWay.addMouseListener(new MenuSearchWayListener(recousiveWay, nonRecousiveWay, pubParamBean));
+		nonRecousiveWay.addMouseListener(new MenuSearchWayListener(recousiveWay, nonRecousiveWay, pubParamBean));
+		formatList.addMouseListener(new AllFormatListener(formatList, selectFormatList, pubParamBean));
+		selectFormatList.addMouseListener(new SelectFormatListListener(formatList, selectFormatList, pubParamBean));
+	}
+	
+	private void initFormatVector(Vector<String> allFormatList){
+		String[] values = new String[] {".txt", ".c", ".java", ".php", ".js", ".cmd", ".bat", ".cpp", ".py", ".pyw", ".sh", ".html", ".xml", ".dtd"};
+		for(int i = 0;i < values.length;i++){
+			allFormatList.add(values[i]);
+		}
+		pubParamBean.setAllFormatList(allFormatList);
 	}
 }
