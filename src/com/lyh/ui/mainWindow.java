@@ -246,7 +246,7 @@ public class mainWindow {
 	}
 	
 	private void initFormatVector(Vector<String> allFormatList){
-		String[] values = new String[] {".txt", ".c", ".java", ".php", ".js", ".cmd", ".bat", ".cpp", ".py", ".pyw", ".sh", ".html", ".xml", ".dtd"};
+		String[] values = new String[] {".txt", ".c", ".java",".class",".php", ".js", ".cmd", ".bat", ".cpp", ".py", ".pyw", ".sh", ".html", ".xml", ".dtd"};
 		for(int i = 0;i < values.length;i++){
 			allFormatList.add(values[i]);
 		}

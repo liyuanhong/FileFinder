@@ -57,7 +57,7 @@ public class MenuFilterListener extends MouseAdapter{
 	}
 	
 	public void aassignFormatFilter(){
-		pubParamBean.setFilterWay(2);
+		pubParamBean.setFilterWay(1);
 	}
 
 	public void manuFormatFilter(){

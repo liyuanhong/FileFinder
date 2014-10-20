@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -37,7 +38,6 @@ public class StartSearchListener extends MouseAdapter{
 		this.selectFormatList = this.selectFormatList;
 		this.runStatusArea = runStatusArea;
 		this.resultArea = resultArea;
-		manuFormatFilter();
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class StartSearchListener extends MouseAdapter{
 		keyword = keywordsField.getText();
 		pubParamBean.setKeywordsField(keyword);
 		searchRootDir = pubParamBean.getSearchRootDir();
-//		try{
+		try{
 			File file = new File(searchRootDir);
 			File[] filelist = file.listFiles();
 			if(filelist != null){
@@ -59,10 +59,10 @@ public class StartSearchListener extends MouseAdapter{
 					startCurrentSearch(filelist);
 				}				
 			}			
-//		}catch(Exception ex){
-//			Toolkit.getDefaultToolkit().beep();
-//			JOptionPane.showMessageDialog(frame, "目录不存在或目录格式有问题！", "信息", JOptionPane.INFORMATION_MESSAGE);
-//		}
+		}catch(Exception ex){
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(frame, "目录不存在或目录格式有问题！", "信息", JOptionPane.INFORMATION_MESSAGE);
+		}
 		
 	}
 	
@@ -76,8 +76,9 @@ public class StartSearchListener extends MouseAdapter{
 					File[] _filelist = _file.listFiles();
 					startTreeSearch(_filelist);
 				}else{
-					searchKeywork(filelist[i].getAbsolutePath());
-					System.out.println(filelist[i].getAbsolutePath());
+					if(isFilterFile(filelist[i].getAbsolutePath())){
+						searchKeywork(filelist[i].getAbsolutePath());
+					}
 				}
 			}
 		}		
@@ -90,7 +91,9 @@ public class StartSearchListener extends MouseAdapter{
 				if(filelist[i].isDirectory()){
 					
 				}else{
-					searchKeywork(filelist[i].getAbsolutePath());
+					if(isFilterFile(filelist[i].getAbsolutePath())){
+						searchKeywork(filelist[i].getAbsolutePath());
+					}
 				}
 			}
 		}
@@ -115,39 +118,57 @@ public class StartSearchListener extends MouseAdapter{
 	}
 	
 	
-	public boolean isFilterFile(){
-		
-		return true;
+	public boolean isFilterFile(String file){
+		if(pubParamBean.getFilterWay() == 1){
+			return aassignFormatFilter(file);
+		}else if(pubParamBean.getFilterWay() == 2){
+			return manuFormatFilter(file);
+		}else{
+			return allFormatFilter();
+		}
 	}
 	
 	public boolean allFormatFilter(){
 		return true;
 	}
 	
-	public void aassignFormatFilter(){
-		
+	public boolean aassignFormatFilter(String file){
+		String _suff = getFileSuffix(file);
+		Vector<String> selectedFormatList = pubParamBean.getSelectedFormatList();
+		for(int i = 0;i < selectedFormatList.size();i++){
+			if(selectedFormatList.get(i).equals(_suff)){
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public void manuFormatFilter(){
-		
+	public boolean manuFormatFilter(String file){
+		String _suff = getFileSuffix(file);
+		Vector<String> manuFormatList = pubParamBean.getManuFormatList();
+		for(int i = 0;i < manuFormatList.size();i++){
+			if(manuFormatList.get(i).equals(_suff)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	//初始化自定义过滤格式
 	public void initManuFormat(){
+		pubParamBean.setManuFormatList(new Vector<String>());
 		String[] suffix = manuDefineArea.getText().split(" ");
 		for(int i  = 0;i < suffix.length;i++){
 			pubParamBean.getManuFormatList().add(suffix[i]);
 		}
 	}
 	
+	//获取文件的后缀
 	public String getFileSuffix(String file){
-		System.out.println(file + "--");
-		String[] temp = file.split(".");
+		String[] temp = file.split("[.]");
 		String _suffix = "not a file";
-		System.out.println(temp.length);
 		if(temp.length != 0){
 			_suffix =  "." + temp[temp.length - 1];
-			System.out.println("-----");
 		}				
 		return _suffix;
 	}
