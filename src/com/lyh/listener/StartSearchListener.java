@@ -37,17 +37,19 @@ public class StartSearchListener extends MouseAdapter{
 		this.selectFormatList = this.selectFormatList;
 		this.runStatusArea = runStatusArea;
 		this.resultArea = resultArea;
+		manuFormatFilter();
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
+		initManuFormat();
 		resultArea.setText("");
 		runStatusArea.setText("");
 		keyword = keywordsField.getText();
 		pubParamBean.setKeywordsField(keyword);
 		searchRootDir = pubParamBean.getSearchRootDir();
-		try{
+//		try{
 			File file = new File(searchRootDir);
 			File[] filelist = file.listFiles();
 			if(filelist != null){
@@ -57,10 +59,10 @@ public class StartSearchListener extends MouseAdapter{
 					startCurrentSearch(filelist);
 				}				
 			}			
-		}catch(Exception ex){
-			Toolkit.getDefaultToolkit().beep();
-			JOptionPane.showMessageDialog(frame, "目录不存在或目录格式有问题！", "信息", JOptionPane.INFORMATION_MESSAGE);
-		}
+//		}catch(Exception ex){
+//			Toolkit.getDefaultToolkit().beep();
+//			JOptionPane.showMessageDialog(frame, "目录不存在或目录格式有问题！", "信息", JOptionPane.INFORMATION_MESSAGE);
+//		}
 		
 	}
 	
@@ -75,6 +77,7 @@ public class StartSearchListener extends MouseAdapter{
 					startTreeSearch(_filelist);
 				}else{
 					searchKeywork(filelist[i].getAbsolutePath());
+					System.out.println(filelist[i].getAbsolutePath());
 				}
 			}
 		}		
@@ -111,8 +114,14 @@ public class StartSearchListener extends MouseAdapter{
 		}
 	}
 	
-	public void allFormatFilter(){
-		//不需要进性文件过滤
+	
+	public boolean isFilterFile(){
+		
+		return true;
+	}
+	
+	public boolean allFormatFilter(){
+		return true;
 	}
 	
 	public void aassignFormatFilter(){
@@ -121,6 +130,26 @@ public class StartSearchListener extends MouseAdapter{
 
 	public void manuFormatFilter(){
 		
+	}
+	
+	//初始化自定义过滤格式
+	public void initManuFormat(){
+		String[] suffix = manuDefineArea.getText().split(" ");
+		for(int i  = 0;i < suffix.length;i++){
+			pubParamBean.getManuFormatList().add(suffix[i]);
+		}
+	}
+	
+	public String getFileSuffix(String file){
+		System.out.println(file + "--");
+		String[] temp = file.split(".");
+		String _suffix = "not a file";
+		System.out.println(temp.length);
+		if(temp.length != 0){
+			_suffix =  "." + temp[temp.length - 1];
+			System.out.println("-----");
+		}				
+		return _suffix;
 	}
 }
 

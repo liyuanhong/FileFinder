@@ -16,10 +16,20 @@ public class PubParamBean {
 	//所有可以选择的格式
 	private Vector<String> allFormatList = new Vector<String>();
 	//选择要过滤掉的格式
-	private Vector<String> selectedFormatList = new Vector<String>();;
+	private Vector<String> selectedFormatList = new Vector<String>();
+	//自定义要过滤的格式
+	private Vector<String> manuFormatList = new Vector<String>();
 
 	public int getFilterWay() {
 		return filterWay;
+	}
+
+	public Vector<String> getManuFormatList() {
+		return manuFormatList;
+	}
+
+	public void setManuFormatList(Vector<String> manuFormatList) {
+		this.manuFormatList = manuFormatList;
 	}
 
 	public void setFilterWay(int filterWay) {
