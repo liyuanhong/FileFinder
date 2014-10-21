@@ -112,7 +112,7 @@ public class StartSearchListener extends MouseAdapter{
 			BufferedReader bfreader = new BufferedReader(reader);
 			String temp = null;
 			while((temp = bfreader.readLine()) != null){
-//				System.out.println(temp);
+				System.out.println(temp);
 				if(temp.contains(keyword)){
 					resultArea.append(filePath + "\r\n");
 					return;
@@ -197,7 +197,8 @@ public class StartSearchListener extends MouseAdapter{
 				} 
 		}catch (Exception e) {
 			e.printStackTrace();
-		}				
+		}			
+		System.out.println(coding);
 		return coding;
 	}
 }
