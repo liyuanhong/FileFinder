@@ -25,6 +25,7 @@ import javax.swing.event.MenuEvent;
 
 import com.lyh.bean.PubParamBean;
 import com.lyh.listener.AllFormatListener;
+import com.lyh.listener.InfoListener;
 import com.lyh.listener.MenuExitListener;
 import com.lyh.listener.MenuFilterListener;
 import com.lyh.listener.MenuSearchWayListener;
@@ -243,6 +244,7 @@ public class mainWindow {
 		nonRecousiveWay.addMouseListener(new MenuSearchWayListener(recousiveWay, nonRecousiveWay, pubParamBean));
 		formatList.addMouseListener(new AllFormatListener(formatList, selectFormatList, pubParamBean));
 		selectFormatList.addMouseListener(new SelectFormatListListener(formatList, selectFormatList, pubParamBean));
+		detailsMenu.addActionListener(new InfoListener(frame));
 	}
 	
 	private void initFormatVector(Vector<String> allFormatList){
