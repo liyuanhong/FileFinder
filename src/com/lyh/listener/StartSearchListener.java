@@ -69,6 +69,7 @@ public class StartSearchListener extends MouseAdapter{
 		
 	}
 	
+	//µ›πÈ≤È’“
 	private void startTreeSearch(File[] filelist){
 		if(filelist != null){
 			for(int i = 0;i < filelist.length;i++){
@@ -87,6 +88,7 @@ public class StartSearchListener extends MouseAdapter{
 		}		
 	}
 	
+	//∑«µ›πÈ≤È’“
 	private void startCurrentSearch(File[] filelist){
 		if(filelist != null){
 			for(int i = 0;i < filelist.length;i++){
@@ -110,7 +112,7 @@ public class StartSearchListener extends MouseAdapter{
 			BufferedReader bfreader = new BufferedReader(reader);
 			String temp = null;
 			while((temp = bfreader.readLine()) != null){
-				System.out.println(temp);
+//				System.out.println(temp);
 				if(temp.contains(keyword)){
 					resultArea.append(filePath + "\r\n");
 					return;
