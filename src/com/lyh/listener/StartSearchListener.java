@@ -5,7 +5,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -101,10 +104,12 @@ public class StartSearchListener extends MouseAdapter{
 	
 	private void searchKeywork(String filePath){
 		try {
-			FileReader reader = new FileReader(filePath);
+//			FileReader reader = new FileReader(filePath);
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(filePath), "UTF-8");
 			BufferedReader bfreader = new BufferedReader(reader);
-			String temp = "";
+			String temp = null;
 			while((temp = bfreader.readLine()) != null){
+//				System.out.println(temp);
 				if(temp.contains(keyword)){
 					resultArea.append(filePath + "\r\n");
 					return;
