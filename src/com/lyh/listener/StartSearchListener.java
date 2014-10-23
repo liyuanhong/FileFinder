@@ -108,7 +108,7 @@ public class StartSearchListener extends MouseAdapter{
 		try {
 //			FileReader reader = new FileReader(filePath);
 			String coding = getEncoding(filePath);
-			InputStreamReader reader = new InputStreamReader(new FileInputStream(filePath), coding);
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(filePath), "GBK");
 			BufferedReader bfreader = new BufferedReader(reader);
 			String temp = null;
 			while((temp = bfreader.readLine()) != null){
