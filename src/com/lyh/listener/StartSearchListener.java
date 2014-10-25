@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Vector;
 
@@ -18,6 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import com.lyh.bean.PubParamBean;
+import com.lyh.jchardet.FileCharsetDetector;
 
 public class StartSearchListener extends MouseAdapter{
 	private JFrame frame;
@@ -106,13 +108,11 @@ public class StartSearchListener extends MouseAdapter{
 	
 	private void searchKeywork(String filePath){
 		try {
-//			FileReader reader = new FileReader(filePath);
 			String coding = getEncoding(filePath);
-			InputStreamReader reader = new InputStreamReader(new FileInputStream(filePath), "GBK");
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(filePath), coding);
 			BufferedReader bfreader = new BufferedReader(reader);
 			String temp = null;
 			while((temp = bfreader.readLine()) != null){
-				System.out.println(temp);
 				if(temp.contains(keyword)){
 					resultArea.append(filePath + "\r\n");
 					return;
@@ -184,21 +184,14 @@ public class StartSearchListener extends MouseAdapter{
 	//获取编码方式参见：http://blog.csdn.net/paul630/article/details/6164390
 	public String getEncoding(String file){
 		BufferedInputStream bin;
-		String coding = "GBK";
+		String coding = "GBK";	
 		try {
-			bin = new BufferedInputStream(new FileInputStream(file));
-			int p = (bin.read() << 8) + bin.read();
-			bin.close();
-			switch (p) {  
-				case 0xefbb: coding = "UTF-8"; break;  
-				case 0xfffe: coding = "Unicode"; break;  
-				case 0xfeff: coding = "UTF-16BE"; break;  
-				default: coding = "GBK";
-				} 
-		}catch (Exception e) {
-			e.printStackTrace();
-		}			
-		System.out.println(coding);
+		coding = FileCharsetDetector.guestFileEncoding(new File(file));
+	} catch (FileNotFoundException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
 		return coding;
 	}
 }
